@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Report: ISO 42001 AI Governance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+       .gradient-bg { background: linear-gradient(135deg, #0a66c2 0%, #004182 100%); }
+       .tab-active { border-bottom: 3px solid #0a66c2; color: #0a66c2; font-weight: 700; }
+       .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <div class="gradient-bg text-white py-10 px-6 text-center">
+        <h1 class="text-2xl md:text-4xl font-bold mb-2 tracking-tight">ISO/IEC 42001:2023 Analysis</h1>
+        <p class="text-blue-100 text-sm md:text-base opacity-90 uppercase tracking-widest font-semibold">Institutionalizing the Global AI Economy</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 -mt-8 pb-12">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-lg card-shadow text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase">Total Certified</p>
+                <p class="text-2xl font-black text-blue-700">~350</p>
+                <p class="text-[10px] text-gray-400">Global Entities</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg card-shadow text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase">Adoption Lead</p>
+                <p class="text-2xl font-black text-blue-700">27.6%</p>
+                <p class="text-[10px] text-gray-400">Denmark (Large Ent.)</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg card-shadow text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase">Expert Gap</p>
+                <p class="text-2xl font-black text-red-600">~60</p>
+                <p class="text-[10px] text-gray-400">Qual. Consultants</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg card-shadow text-center">
+                <p class="text-gray-500 text-xs font-bold uppercase">Ent. Cost</p>
+                <p class="text-2xl font-black text-blue-700">$353k</p>
+                <p class="text-[10px] text-gray-400">Avg. 1st Year</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl card-shadow overflow-hidden">
+            <div class="flex border-b text-center text-xs md:text-sm font-semibold uppercase tracking-tight">
+                <button onclick="showTab('market')" id="btn-market" class="flex-1 py-4 tab-active transition-all">Market Stats</button>
+                <button onclick="showTab('frameworks')" id="btn-frameworks" class="flex-1 py-4 text-gray-500 hover:bg-gray-50 transition-all">Frameworks</button>
+                <button onclick="showTab('trust')" id="btn-trust" class="flex-1 py-4 text-gray-500 hover:bg-gray-50 transition-all">Trust Chain</button>
+            </div>
+
+            <div id="market" class="p-6 space-y-6">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <span class="w-2 h-6 bg-blue-600 mr-2 rounded"></span> Regional Adoption Distribution
+                </h3>
+                <div class="h-64 relative">
+                    <canvas id="marketChart"></canvas>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <p class="text-sm text-blue-800 leading-relaxed italic">
+                        "While interest is skyrocketing, actual certification is bottlenecked by the <b>IAF-accredited auditor shortage</b>. Early adopters like <b>AWS, Anthropic, and Cognizant</b> are using the standard as a 'market passport' to secure regulated contracts."
+                    </p>
+                </div>
+            </div>
+
+            <div id="frameworks" class="p-6 hidden space-y-6">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <span class="w-2 h-6 bg-blue-600 mr-2 rounded"></span> Integration Crosswalk
+                </h3>
+                <div class="space-y-4">
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <h4 class="font-bold text-sm text-blue-700 uppercase mb-1">NIST AI RMF -> ISO 42001</h4>
+                        <p class="text-sm text-gray-600 leading-snug">The <b>71 NIST requirements</b> serve as the "Think" layer, while ISO 42001 provides the auditable "Implementation" layer.</p>
+                    </div>
+                    <div class="border rounded-lg p-4 bg-gray-50">
+                        <h4 class="font-bold text-sm text-blue-700 uppercase mb-1">EU AI ACT -> ISO 42001</h4>
+                        <p class="text-sm text-gray-600 leading-snug">Direct fulfillment of <b>Article 17 (QMS)</b> and transparency requirements for <b>GPAI (Articles 53 & 55)</b>.</p>
+                    </div>
+                </div>
+                <div class="flex justify-around text-center mt-4">
+                    <div class="px-2">
+                        <p class="text-xs font-bold text-gray-400">NIST</p>
+                        <p class="text-sm font-bold">Voluntary</p>
+                    </div>
+                    <div class="px-2">
+                        <p class="text-xs font-bold text-gray-400">ISO</p>
+                        <p class="text-sm font-bold">Certifiable</p>
+                    </div>
+                    <div class="px-2">
+                        <p class="text-xs font-bold text-gray-400">EU ACT</p>
+                        <p class="text-sm font-bold text-red-600">Binding</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="trust" class="p-6 hidden space-y-4">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <span class="w-2 h-6 bg-blue-600 mr-2 rounded"></span> Validation Infrastructure
+                </h3>
+                <div class="relative pl-6 border-l-2 border-dashed border-gray-300 space-y-8">
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white ring-1 ring-blue-600"></span>
+                        <h4 class="font-bold text-sm">Accreditation (UKAS / ANAB)</h4>
+                        <p class="text-xs text-gray-500">The "Auditor of Auditors." Validates technical competence of certification bodies via <b>ISO 42006</b>.</p>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white ring-1 ring-blue-600"></span>
+                        <h4 class="font-bold text-sm">IAF CertSearch Database</h4>
+                        <p class="text-xs text-gray-500">The "Single Source of Truth." Real-time verification of certification status to prevent <b>AI-Washing</b>.</p>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute -left-[31px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white ring-1 ring-blue-600"></span>
+                        <h4 class="font-bold text-sm">The Organization (AIMS)</h4>
+                        <p class="text-xs text-gray-500">Implements 38 controls (Annex A) covering <b>Bias Mitigation, Lifecycle, and Human Oversight</b>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <p class="text-[10px] text-gray-400 mt-6 text-center italic">Research generated on April 20, 2026. Data sourced from UKAS, NIST, ISO, and market intelligence reports.</p>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.getElementById('market').classList.add('hidden');
+            document.getElementById('frameworks').classList.add('hidden');
+            document.getElementById('trust').classList.add('hidden');
+            
+            document.getElementById(tabName).classList.remove('hidden');
+            
+            document.getElementById('btn-market').classList.remove('tab-active');
+            document.getElementById('btn-frameworks').classList.remove('tab-active');
+            document.getElementById('btn-trust').classList.remove('tab-active');
+            
+            document.getElementById('btn-market').classList.add('text-gray-500');
+            document.getElementById('btn-frameworks').classList.add('text-gray-500');
+            document.getElementById('btn-trust').classList.add('text-gray-500');
+
+            document.getElementById('btn-' + tabName).classList.add('tab-active');
+            document.getElementById('btn-' + tabName).classList.remove('text-gray-500');
+        }
+
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['North America', 'European Union', 'United Kingdom', 'APAC', 'Other'],
+                datasets: [{
+                    data: [42, 28, 18, 9, 3],
+                    backgroundColor: ['#004182', '#0073b1', '#313335', '#0a66c2', '#e6e9ec'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html>
