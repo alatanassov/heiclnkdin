@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISO/IEC 42001:2023 — Cryptographic Security & Post-Quantum Resilience</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1526;
+    --bg3: #141d30;
+    --bg4: #1a2540;
+    --border: #1e3a5f;
+    --border2: #2a4a6b;
+    --accent-blue: #00d4ff;
+    --accent-cyan: #00ffcc;
+    --accent-gold: #ffd700;
+    --accent-violet: #a78bfa;
+    --accent-orange: #ff6b35;
+    --accent-red: #ff4757;
+    --accent-green: #00ff87;
+    --text-primary: #e8f4fd;
+    --text-secondary: #8ba8c8;
+    --text-muted: #4a6080;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    padding: 80px 40px 60px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 0%, rgba(0,212,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 100%, rgba(167,139,250,0.07) 0%, transparent 60%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(30,58,95,0.25) 39px,
+        rgba(30,58,95,0.25) 40px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 59px,
+        rgba(30,58,95,0.15) 59px,
+        rgba(30,58,95,0.15) 60px
+      );
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 3px;
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: var(--mono);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .hero h1 .std {
+    color: var(--accent-blue);
+  }
+
+  .hero h1 .year {
+    color: var(--text-muted);
+    font-weight: 300;
+    font-size: 0.65em;
+  }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: 300;
+    color: var(--accent-cyan);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-desc {
+    max-width: 720px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 36px;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+  .hero-meta span::before { content: '//'; color: var(--border2); }
+
+  /* ─── TOC ─── */
+  .toc-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    scrollbar-width: none;
+  }
+
+  .toc-bar::-webkit-scrollbar { display: none; }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .toc-item:hover {
+    color: var(--accent-blue);
+    border-bottom-color: var(--accent-blue);
+    background: rgba(0,212,255,0.04);
+  }
+
+  .toc-num {
+    color: var(--border2);
+    font-size: 10px;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  section {
+    margin-bottom: 80px;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent-blue);
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .section-title .highlight {
+    color: var(--accent-cyan);
+  }
+
+  /* ─── CALLOUT BOXES ─── */
+  .callout {
+    border-left: 3px solid var(--accent-blue);
+    background: rgba(0,212,255,0.04);
+    padding: 20px 24px;
+    margin: 28px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout.gold { border-color: var(--accent-gold); background: rgba(255,215,0,0.04); }
+  .callout.violet { border-color: var(--accent-violet); background: rgba(167,139,250,0.04); }
+  .callout.green { border-color: var(--accent-green); background: rgba(0,255,135,0.04); }
+  .callout.orange { border-color: var(--accent-orange); background: rgba(255,107,53,0.04); }
+  .callout.red { border-color: var(--accent-red); background: rgba(255,71,87,0.04); }
+
+  .callout-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .callout.gold .callout-label { color: var(--accent-gold); }
+  .callout.violet .callout-label { color: var(--accent-violet); }
+  .callout.green .callout-label { color: var(--accent-green); }
+  .callout.orange .callout-label { color: var(--accent-orange); }
+  .callout.red .callout-label { color: var(--accent-red); }
+
+  .callout p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .callout strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ─── PROSE ─── */
+  .prose {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.85;
+    max-width: 820px;
+  }
+
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { color: var(--accent-cyan); font-style: normal; font-family: var(--mono); font-size: 0.9em; }
+
+  /* ─── GRID CARDS ─── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--border2); }
+
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent-blue);
+  }
+
+  .card-accent.gold { background: var(--accent-gold); }
+  .card-accent.violet { background: var(--accent-violet); }
+  .card-accent.cyan { background: var(--accent-cyan); }
+  .card-accent.orange { background: var(--accent-orange); }
+  .card-accent.red { background: var(--accent-red); }
+  .card-accent.green { background: var(--accent-green); }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card h3 {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .card .tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent-blue);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── CLAUSE TABLE ─── */
+  .clause-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 24px 0;
+  }
+
+  .clause-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--bg2);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+  }
+
+  .clause-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(30,58,95,0.4);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .clause-table tr:hover td { background: rgba(0,212,255,0.025); }
+
+  .clause-table .clause-id {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent-blue);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .clause-table .clause-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 13px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .badge-blue { background: rgba(0,212,255,0.12); color: var(--accent-blue); border: 1px solid rgba(0,212,255,0.25); }
+  .badge-gold { background: rgba(255,215,0,0.1); color: var(--accent-gold); border: 1px solid rgba(255,215,0,0.25); }
+  .badge-violet { background: rgba(167,139,250,0.1); color: var(--accent-violet); border: 1px solid rgba(167,139,250,0.25); }
+  .badge-green { background: rgba(0,255,135,0.1); color: var(--accent-green); border: 1px solid rgba(0,255,135,0.25); }
+  .badge-orange { background: rgba(255,107,53,0.1); color: var(--accent-orange); border: 1px solid rgba(255,107,53,0.25); }
+  .badge-red { background: rgba(255,71,87,0.1); color: var(--accent-red); border: 1px solid rgba(255,71,87,0.25); }
+
+  /* ─── RISK MATRIX ─── */
+  .risk-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    max-width: 420px;
+    margin: 24px 0;
+  }
+
+  .risk-cell {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 2px;
+    min-height: 90px;
+  }
+
+  .risk-cell .risk-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .risk-cell p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+
+  /* ─── MILESTONE TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 28px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent-blue), var(--accent-violet));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 8px rgba(0,212,255,0.5);
+  }
+
+  .timeline-item.gold::before { background: var(--accent-gold); box-shadow: 0 0 8px rgba(255,215,0,0.5); }
+  .timeline-item.violet::before { background: var(--accent-violet); box-shadow: 0 0 8px rgba(167,139,250,0.5); }
+  .timeline-item.green::before { background: var(--accent-green); box-shadow: 0 0 8px rgba(0,255,135,0.5); }
+  .timeline-item.orange::before { background: var(--accent-orange); box-shadow: 0 0 8px rgba(255,107,53,0.5); }
+
+  .timeline-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent-blue);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .timeline-item.gold .timeline-date { color: var(--accent-gold); }
+  .timeline-item.violet .timeline-date { color: var(--accent-violet); }
+  .timeline-item.green .timeline-date { color: var(--accent-green); }
+  .timeline-item.orange .timeline-date { color: var(--accent-orange); }
+
+  .timeline-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .timeline-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-block-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .code-block-dots { display: flex; gap: 5px; }
+  .code-block-dots span { width: 9px; height: 9px; border-radius: 50%; }
+  .code-block-dots span:nth-child(1) { background: #ff5f56; }
+  .code-block-dots span:nth-child(2) { background: #febc2e; }
+  .code-block-dots span:nth-child(3) { background: #28c840; }
+
+  .code-block pre {
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    overflow-x: auto;
+  }
+
+  .code-block .kw { color: var(--accent-violet); }
+  .code-block .str { color: var(--accent-cyan); }
+  .code-block .cmt { color: var(--text-muted); }
+  .code-block .key { color: var(--accent-gold); }
+  .code-block .val { color: var(--accent-green); }
+  .code-block .cls { color: var(--accent-blue); }
+
+  /* ─── ANNEX CONTROL GRID ─── */
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .control-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .control-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent-blue);
+  }
+
+  .control-item.gold::before { background: var(--accent-gold); }
+  .control-item.violet::before { background: var(--accent-violet); }
+  .control-item.green::before { background: var(--accent-green); }
+  .control-item.orange::before { background: var(--accent-orange); }
+  .control-item.cyan::before { background: var(--accent-cyan); }
+
+  .control-ref {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .control-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .control-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 24px 0;
+  }
+
+  .compare-table th {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .compare-table th:first-child { color: var(--text-muted); }
+  .compare-table th:nth-child(2) { color: var(--accent-blue); }
+  .compare-table th:nth-child(3) { color: var(--accent-cyan); }
+  .compare-table th:nth-child(4) { color: var(--accent-gold); }
+
+  .compare-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(30,58,95,0.4);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+
+  .compare-table td:first-child {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .compare-table tr:hover td { background: rgba(0,212,255,0.02); }
+
+  .check { color: var(--accent-green); font-size: 14px; }
+  .partial { color: var(--accent-gold); font-size: 14px; }
+  .cross { color: var(--accent-red); font-size: 14px; }
+
+  /* ─── PQC ALGORITHM TABLE ─── */
+  .algo-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .algo-card .algo-fips {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent-blue);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .algo-card .algo-name {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .algo-card .algo-basis {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+  }
+
+  .algo-card .algo-purpose {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .algo-card .algo-42001 {
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .algo-card .algo-42001 strong {
+    color: var(--accent-cyan);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ─── MATURITY MODEL ─── */
+  .maturity-track {
+    display: flex;
+    gap: 4px;
+    margin: 28px 0;
+    flex-wrap: wrap;
+  }
+
+  .maturity-level {
+    flex: 1;
+    min-width: 140px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 18px 16px;
+    position: relative;
+  }
+
+  .maturity-level::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--border2);
+    font-size: 16px;
+    z-index: 1;
+  }
+
+  .maturity-level:last-child::after { display: none; }
+
+  .maturity-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--border2);
+    margin-bottom: 6px;
+  }
+
+  .maturity-level.active .maturity-num { color: var(--accent-blue); }
+  .maturity-level.target .maturity-num { color: var(--accent-gold); }
+
+  .maturity-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .maturity-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ─── STAT BLOCKS ─── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .stat-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-value.gold { color: var(--accent-gold); }
+  .stat-value.violet { color: var(--accent-violet); }
+  .stat-value.green { color: var(--accent-green); }
+  .stat-value.orange { color: var(--accent-orange); }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* ─── WARNING BANNER ─── */
+  .warning-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: rgba(255,71,87,0.06);
+    border: 1px solid rgba(255,71,87,0.2);
+    border-left: 4px solid var(--accent-red);
+    border-radius: 0 4px 4px 0;
+    padding: 20px 24px;
+    margin: 28px 0;
+  }
+
+  .warning-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .warning-content .warning-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-red);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .warning-content p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ─── IMPLEMENTATION ROADMAP ─── */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .roadmap-phase {
+    padding: 24px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .roadmap-phase:last-child { border-right: none; }
+
+  .phase-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .phase-title {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .phase-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .phase-items li {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .phase-items li::before {
+    content: '▸';
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 10px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 40px 0;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+  }
+
+  footer .footer-logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent-blue);
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 8px;
+  }
+
+  footer .footer-refs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  footer .footer-refs a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--border2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  footer .footer-refs a:hover { color: var(--accent-blue); }
+
+  @media (max-width: 680px) {
+    .hero, main, footer { padding: 40px 20px; }
+    .toc-bar { padding: 0 20px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .maturity-track { flex-direction: column; }
+    .maturity-level::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Research Analysis · April 2026 · HEIC Ltd.
+  </div>
+  <h1>
+    <span class="std">ISO/IEC 42001</span><span class="year">:2023</span><br>
+    Cryptographic Security &amp;<br>Post-Quantum Resilience
+  </h1>
+  <div class="hero-sub">AI Management Systems for the Quantum Era</div>
+  <p class="hero-desc">
+    A comprehensive technical analysis of how ISO/IEC 42001:2023 applies to software companies
+    operating in cryptographic security — from classical key management and PKI infrastructure
+    through to post-quantum algorithm governance, crypto-agile lifecycle management, and
+    NIST FIPS 203/204/205 compliance readiness.
+  </p>
+  <div class="hero-meta">
+    <span>ISO/IEC 42001:2023 — AIMS</span>
+    <span>FIPS 203/204/205 · ML-KEM · ML-DSA · SLH-DSA</span>
+    <span>EU AI Act · NIS2 · CNSA 2.0</span>
+    <span>Clauses 6.1 · 8.2 · 8.3 · 8.4 · Annex A</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     TOC
+══════════════════════════════════════════════════ -->
+<nav class="toc-bar">
+  <a href="#s1" class="toc-item"><span class="toc-num">01</span> Context &amp; Scope</a>
+  <a href="#s2" class="toc-item"><span class="toc-num">02</span> Cryptographic Security Layer</a>
+  <a href="#s3" class="toc-item"><span class="toc-num">03</span> Clause Architecture</a>
+  <a href="#s4" class="toc-item"><span class="toc-num">04</span> Post-Quantum Domain</a>
+  <a href="#s5" class="toc-item"><span class="toc-num">05</span> Risk Assessment Deep-Dive</a>
+  <a href="#s6" class="toc-item"><span class="toc-num">06</span> Annex A Controls</a>
+  <a href="#s7" class="toc-item"><span class="toc-num">07</span> Standards Comparison</a>
+  <a href="#s8" class="toc-item"><span class="toc-num">08</span> Implementation Roadmap</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════ -->
+<main>
+
+<!-- ─── SECTION 1: CONTEXT & SCOPE ─── -->
+<section id="s1">
+  <div class="section-header">
+    <span class="section-num">01 //</span>
+    <h2 class="section-title">Context &amp; <span class="highlight">Scope of Applicability</span></h2>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-block">
+      <div class="stat-value">Dec</div>
+      <div class="stat-label">2023<br>Publication Date</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value gold">10</div>
+      <div class="stat-label">Mandatory<br>Clauses (4–10)</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value violet">38</div>
+      <div class="stat-label">Annex A<br>Controls</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value green">3yr</div>
+      <div class="stat-label">Certification<br>Cycle</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value orange">~40%</div>
+      <div class="stat-label">Control Overlap<br>with ISO 27001</div>
+    </div>
+  </div>
+
+  <p class="prose">
+    ISO/IEC 42001:2023 is the world's first certifiable international standard for Artificial Intelligence
+    Management Systems (AIMS). Unlike sector-specific frameworks, it operates at the <strong>governance
+    layer</strong> — defining how organisations establish policies, assess risks, govern lifecycles, and
+    continuously improve their AI-related operations. For software companies in cryptographic security,
+    this governance layer is the missing tier that neither FIPS 140-3, Common Criteria, nor ISO 27001 alone provides:
+    <em>structured AI-specific risk management for the probabilistic components embedded within cryptographic infrastructure.</em>
+  </p>
+
+  <div class="callout">
+    <div class="callout-label">⚡ Core Distinction</div>
+    <p>ISO/IEC 42001 does <strong>not</strong> certify products or algorithms. It certifies that an
+    organisation's <strong>management system</strong> for AI is established, operated, and continuously
+    improved according to internationally recognised principles. For a cryptographic security firm,
+    this means governing the AI components within your products — entropy validators, anomaly detectors,
+    protocol negotiators, key lifecycle monitors — through an auditable, documented framework.</p>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 14px; color: var(--text-primary); margin: 32px 0 16px; letter-spacing: 0.04em;">WHO IN CRYPTOGRAPHIC SECURITY SHOULD IMPLEMENT ISO 42001?</h3>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-accent"></div>
+      <div class="card-label">Category A</div>
+      <h3>PKI &amp; Certificate Infrastructure</h3>
+      <p>Certificate Authorities, HSM vendors, key management service providers embedding ML anomaly detection or AI-driven certificate lifecycle automation.</p>
+      <span class="tag">HIGH RELEVANCE</span>
+    </div>
+    <div class="card">
+      <div class="card-accent gold"></div>
+      <div class="card-label">Category B</div>
+      <h3>Cryptographic Library Developers</h3>
+      <p>Open-source and commercial library maintainers (OpenSSL, BouncyCastle, libsodium vendors) adding AI-assisted side-channel detection or fuzzing intelligence.</p>
+      <span class="tag" style="border-color: rgba(255,215,0,0.3); color: var(--accent-gold); background: rgba(255,215,0,0.08);">MEDIUM-HIGH</span>
+    </div>
+    <div class="card">
+      <div class="card-accent cyan"></div>
+      <div class="card-label">Category C</div>
+      <h3>Secure Communication Platforms</h3>
+      <p>TLS/mTLS platforms, VPN vendors, and secure messaging providers using AI for traffic analysis, threat classification, or adaptive key rotation.</p>
+      <span class="tag" style="border-color: rgba(0,255,204,0.3); color: var(--accent-cyan); background: rgba(0,255,204,0.08);">HIGH RELEVANCE</span>
+    </div>
+    <div class="card">
+      <div class="card-accent violet"></div>
+      <div class="card-label">Category D</div>
+      <h3>Post-Quantum Security Vendors</h3>
+      <p>Companies developing, integrating, or commercialising ML-KEM, ML-DSA, SLH-DSA implementations — especially where AI governs migration decisions or entropy sourcing.</p>
+      <span class="tag" style="border-color: rgba(167,139,250,0.3); color: var(--accent-violet); background: rgba(167,139,250,0.08);">CRITICAL</span>
+    </div>
+    <div class="card">
+      <div class="card-accent orange"></div>
+      <div class="card-label">Category E</div>
+      <h3>QRNG &amp; Quantum Entropy Providers</h3>
+      <p>Quantum Random Number Generator vendors and entropy-as-a-service providers where AI validates entropy quality, detects degradation, or manages NIST SP 800-90B compliance.</p>
+      <span class="tag" style="border-color: rgba(255,107,53,0.3); color: var(--accent-orange); background: rgba(255,107,53,0.08);">CRITICAL</span>
+    </div>
+    <div class="card">
+      <div class="card-accent green"></div>
+      <div class="card-label">Category F</div>
+      <h3>Crypto-Agility Orchestration</h3>
+      <p>Policy engines and orchestration platforms that use AI/ML to manage algorithm deprecation timelines, automate cipher suite negotiation, or recommend migration paths.</p>
+      <span class="tag" style="border-color: rgba(0,255,135,0.3); color: var(--accent-green); background: rgba(0,255,135,0.08);">CRITICAL</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 2: CRYPTOGRAPHIC SECURITY LAYER ─── -->
+<section id="s2">
+  <div class="section-header">
+    <span class="section-num">02 //</span>
+    <h2 class="section-title">ISO 42001 for <span class="highlight">Cryptographic Security</span> — The Governance Gap</h2>
+  </div>
+
+  <p class="prose">
+    Classical cryptographic security frameworks (FIPS 140-3, Common Criteria, ISO 27001 Annex A.8.24)
+    govern <strong>algorithms, key material, and information assets</strong>. They are deterministic-world
+    standards: given defined inputs and approved algorithms, outputs are predictable and auditable.
+    ISO 42001 addresses what happens when <strong>non-deterministic AI components</strong> are introduced
+    into that deterministic cryptographic pipeline — a reality every modern cryptographic security
+    company now faces.
+  </p>
+
+  <div class="callout gold">
+    <div class="callout-label">⚙ The Core Problem</div>
+    <p>Modern cryptographic infrastructure increasingly embeds AI at critical decision points: <strong>entropy
+    quality scoring, anomaly detection on key usage patterns, adaptive certificate issuance policies,
+    side-channel attack detection, and protocol negotiation optimisation.</strong> None of these AI components
+    are governed by FIPS 140-3. None appear in ISO 27001's control set. ISO 42001 is the only
+    internationally certifiable standard that addresses this gap.</p>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 32px 0 16px; letter-spacing: 0.06em; text-transform: uppercase;">AI TOUCHPOINTS IN CRYPTOGRAPHIC SECURITY INFRASTRUCTURE</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-accent"></div>
+      <div class="card-icon">🔑</div>
+      <div class="card-label">Key Lifecycle Management</div>
+      <h3>AI-Driven Key Rotation &amp; Revocation</h3>
+      <p>ML models predict optimal rotation intervals based on usage telemetry. ISO 42001 Clause 8.2 requires documented risk assessment of the AI component itself — what happens if the model over-rotates or fails to flag compromised keys?</p>
+    </div>
+    <div class="card">
+      <div class="card-accent cyan"></div>
+      <div class="card-icon">🎲</div>
+      <div class="card-label">Entropy Validation</div>
+      <h3>AI Entropy Quality Assessment</h3>
+      <p>Statistical ML models validate TRNG and QRNG output quality against NIST SP 800-90B. ISO 42001's transparency requirements (Annex A.6.2) mandate explainable entropy rejection decisions — critical when a rejection halts a TLS handshake.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent violet"></div>
+      <div class="card-icon">🔍</div>
+      <div class="card-label">Threat Detection</div>
+      <h3>Anomaly Detection on Cryptographic Operations</h3>
+      <p>AI classifiers monitor for side-channel attack patterns, timing anomalies, and abnormal cipher suite negotiation. False positives can trigger outages; false negatives enable breaches. ISO 42001's performance monitoring (Clause 9.1) governs classifier accuracy requirements.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent gold"></div>
+      <div class="card-icon">📜</div>
+      <div class="card-label">Certificate Management</div>
+      <h3>AI-Automated PKI Operations</h3>
+      <p>Automated certificate issuance, validation, and revocation decisions made by AI agents operating as part of a CA. ISO 42001 Clause 8.4 (AI system impact assessment) applies directly — erroneous AI decisions affect digital trust infrastructure at scale.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent orange"></div>
+      <div class="card-icon">🔄</div>
+      <div class="card-label">Protocol Negotiation</div>
+      <h3>Adaptive TLS/Cipher Suite Selection</h3>
+      <p>AI-driven protocol negotiation selects cipher suites based on peer capability, threat context, and compliance requirements. Non-deterministic selection decisions require governance under ISO 42001 Clause 6.1.2 risk criteria.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent green"></div>
+      <div class="card-icon">🏗</div>
+      <div class="card-label">Supply Chain</div>
+      <h3>Third-Party Cryptographic Component Governance</h3>
+      <p>AI libraries sourced from third parties (hardware security modules, entropy services, cloud KMS providers) carry upstream AI risk. ISO 42001's supplier oversight controls (Annex A.10.6) provide the audit framework that neither FIPS 140-3 nor ISO 27001 fully addresses.</p>
+    </div>
+  </div>
+
+  <div class="callout violet">
+    <div class="callout-label">🔗 Framework Synergy</div>
+    <p>ISO 42001 is <strong>not a replacement</strong> for FIPS 140-3, ISO 27001, or Common Criteria. It is the
+    <strong>AI governance overlay</strong> that sits above them. A cryptographic security company that holds FIPS 140-3
+    validation and ISO 27001 certification but lacks ISO 42001 has certified its algorithms and its information
+    security posture — but has left its AI components <strong>ungoverned by any certifiable standard.</strong></p>
+  </div>
+</section>
+
+<!-- ─── SECTION 3: CLAUSE ARCHITECTURE ─── -->
+<section id="s3">
+  <div class="section-header">
+    <span class="section-num">03 //</span>
+    <h2 class="section-title">Clause <span class="highlight">Architecture</span> — Applied to Cryptographic Security</h2>
+  </div>
+
+  <p class="prose" style="margin-bottom: 28px;">
+    ISO 42001's mandatory clauses (4 through 10) follow the Harmonised Structure shared with ISO 27001
+    and ISO 9001, enabling integrated management systems. Below is each clause mapped directly to
+    its application in a cryptographic security software context.
+  </p>
+
+  <table class="clause-table">
+    <thead>
+      <tr>
+        <th style="width:90px">Clause</th>
+        <th style="width:200px">Title</th>
+        <th>Cryptographic Security Application</th>
+        <th style="width:110px">Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="clause-id">Cl. 4</td>
+        <td><span class="clause-name">Organisational Context</span></td>
+        <td>Define scope of AI components within cryptographic products: entropy validators, key rotation agents, anomaly detectors. Identify regulatory context: CNSA 2.0, NIS2, EU AI Act, FIPS mandates.</td>
+        <td><span class="badge badge-blue">FOUNDATIONAL</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 5</td>
+        <td><span class="clause-name">Leadership</span></td>
+        <td>Establish AI Policy covering responsible use of probabilistic components in security-critical cryptographic operations. Assign AIMS ownership to CISO or Chief Cryptographer role.</td>
+        <td><span class="badge badge-violet">GOVERNANCE</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 6.1</td>
+        <td><span class="clause-name">Risk Planning</span></td>
+        <td>Risk criteria must explicitly include quantum adversary threat models, non-deterministic AI behaviour in cryptographic decision paths, and algorithm deprecation scenarios. Dual assessment: AI risk (6.1.2) + AI system impact (6.1.4).</td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 6.2</td>
+        <td><span class="clause-name">AI Objectives</span></td>
+        <td>Set measurable targets: entropy quality acceptance rate, anomaly detection F1-score thresholds, key rotation accuracy metrics. Link to PQC migration milestones (e.g., ML-KEM deployment by Q3 2026).</td>
+        <td><span class="badge badge-blue">PLANNING</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 7</td>
+        <td><span class="clause-name">Support</span></td>
+        <td>Cryptographic AI competence requirements: staff must understand lattice-based cryptography, NIST PQC standards, and AI model behaviour in adversarial conditions. Document entropy of training data for ML-based classifiers.</td>
+        <td><span class="badge badge-violet">ENABLEMENT</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 8.1</td>
+        <td><span class="clause-name">Operational Control</span></td>
+        <td>Operational governance of AI components in production cryptographic systems: inference pipeline controls, model versioning for deployed classifiers, secure model storage in HSM-adjacent environments.</td>
+        <td><span class="badge badge-orange">OPERATIONAL</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 8.2</td>
+        <td><span class="clause-name">AI Risk Assessment</span></td>
+        <td><strong>Core operational clause.</strong> Ongoing risk assessment of deployed AI components: entropy scorer drift, classifier accuracy degradation under adversarial quantum inputs, model poisoning through compromised training pipelines. Reassess on every material model change.</td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 8.3</td>
+        <td><span class="clause-name">AI Risk Treatment</span></td>
+        <td>Treatment plans for identified AI risks: human-in-the-loop overrides for high-stakes cryptographic decisions, fallback to deterministic algorithms when AI confidence falls below threshold, emergency cipher suite rollback procedures.</td>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 8.4</td>
+        <td><span class="clause-name">AI System Impact Assessment</span></td>
+        <td><strong>Unique to ISO 42001.</strong> Societal and systemic impact assessment of AI in cryptographic infrastructure: What is the blast radius if the AI anomaly detector generates a false positive at scale? How does AI-driven key revocation affect dependent supply chains?</td>
+        <td><span class="badge badge-gold">HIGH</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 9</td>
+        <td><span class="clause-name">Performance Evaluation</span></td>
+        <td>KPIs for AI components in production: classifier drift monitoring, entropy validator accuracy against known-good samples, audit trail completeness for AI-assisted certificate decisions. Internal audit of AIMS against PQC migration objectives.</td>
+        <td><span class="badge badge-blue">MONITORING</span></td>
+      </tr>
+      <tr>
+        <td class="clause-id">Cl. 10</td>
+        <td><span class="clause-name">Improvement</span></td>
+        <td>Corrective action for AI failures: model retraining protocols post-incident, post-quantum algorithm adoption triggered by NIST deprecation notices, continuous improvement cycle aligned to PQC standards evolution (HQC expected FIPS ~2027).</td>
+        <td><span class="badge badge-green">CONTINUOUS</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="code-block">
+    <div class="code-block-header">
+      <span class="code-block-title">AIMS_SCOPE_DEFINITION.yaml — Cryptographic Security Context</span>
+      <div class="code-block-dots"><span></span><span></span><span></span></div>
+    </div>
+    <pre><span class="cmt"># ISO/IEC 42001:2023 — Clause 4.3 Scope Definition</span>
+<span class="cmt"># Illustrative example for a post-quantum security software vendor</span>
+
+<span class="key">aims_scope</span>:
+  <span class="key">organisation_role</span>: <span class="str">"Developer and Provider of AI-enabled PQC Solutions"</span>
+  <span class="key">ai_systems_in_scope</span>:
+    - <span class="key">system</span>: <span class="str">"entropy_quality_validator_v2"</span>
+      <span class="key">ai_type</span>: <span class="str">"statistical_ml_classifier"</span>
+      <span class="key">cryptographic_function</span>: <span class="str">"QRNG output validation — NIST SP 800-90B"</span>
+      <span class="key">risk_tier</span>: <span class="val">CRITICAL</span>
+    - <span class="key">system</span>: <span class="str">"anomaly_detection_engine"</span>
+      <span class="key">ai_type</span>: <span class="str">"deep_learning_sequence_model"</span>
+      <span class="key">cryptographic_function</span>: <span class="str">"Side-channel attack pattern detection"</span>
+      <span class="key">risk_tier</span>: <span class="val">HIGH</span>
+    - <span class="key">system</span>: <span class="str">"pqc_migration_advisor"</span>
+      <span class="key">ai_type</span>: <span class="str">"rule_engine_with_ml_scoring"</span>
+      <span class="key">cryptographic_function</span>: <span class="str">"Algorithm deprecation and ML-KEM migration guidance"</span>
+      <span class="key">risk_tier</span>: <span class="val">HIGH</span>
+
+  <span class="key">regulatory_context</span>:
+    - <span class="str">"NIST FIPS 203 (ML-KEM)"</span>
+    - <span class="str">"NIST FIPS 204 (ML-DSA)"</span>
+    - <span class="str">"NIST FIPS 205 (SLH-DSA)"</span>
+    - <span class="str">"EU AI Act — Art. 15 (accuracy, robustness, security)"</span>
+    - <span class="str">"NIS2 Directive — Art. 21 (risk management measures)"</span>
+    - <span class="str">"CNSA 2.0 — NSA suite transition requirements"</span>
+
+  <span class="key">exclusions</span>:
+    - <span class="str">"Deterministic cipher implementations (governed by FIPS 140-3)"</span>
+    - <span class="str">"Key material storage (governed by ISO 27001 A.8.24)"</span></pre>
+  </div>
+</section>
+
+<!-- ─── SECTION 4: POST-QUANTUM DOMAIN ─── -->
+<section id="s4">
+  <div class="section-header">
+    <span class="section-num">04 //</span>
+    <h2 class="section-title"><span class="highlight">Post-Quantum Cryptography</span> — ISO 42001's Specific Value</h2>
+  </div>
+
+  <div class="callout red">
+    <div class="callout-label">⚠ Harvest Now, Decrypt Later</div>
+    <p><strong>The quantum threat is not theoretical — it is a present governance challenge.</strong> Nation-state
+    adversaries are actively collecting encrypted traffic today for decryption once cryptographically relevant
+    quantum computers (CRQCs) become available. NIST predicts the first post-quantum certificates won't be
+    commercially available until 2026, while CNSA 2.0 requires pure post-quantum algorithms in U.S. national
+    security systems by 2035. PQC software vendors need ISO 42001's PDCA loop <em>now</em>, not at deployment.</p>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 32px 0 16px; letter-spacing: 0.06em; text-transform: uppercase;">NIST PQC STANDARDS — ISO 42001 GOVERNANCE MAPPING</h3>
+
+  <div class="grid-3">
+    <div class="algo-card">
+      <div class="algo-fips">FIPS 203 · Primary KEM</div>
+      <div class="algo-name">ML-KEM</div>
+      <div class="algo-basis">Module-Lattice Key Encapsulation<br>(ex. CRYSTALS-Kyber)</div>
+      <div class="algo-purpose">Primary standard for general encryption and secure key exchange. Comparatively small key sizes, high operational speed. Targeted for broad adoption across TLS, SSH, and PKI infrastructure.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 8.2: Risk assess AI components selecting ML-KEM parameter sets (512/768/1024). Clause 8.4: Impact assess systemic risk of ML-KEM adoption failures in dependent services.
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="algo-fips">FIPS 204 · Primary DSA</div>
+      <div class="algo-name">ML-DSA</div>
+      <div class="algo-basis">Module-Lattice Digital Signature<br>(ex. CRYSTALS-Dilithium)</div>
+      <div class="algo-purpose">Primary standard for protecting digital signatures. Used in code signing, certificate issuance, and document authentication. AI-automated signing pipelines require AIMS governance.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 6.1.4: Impact assessment for AI-automated signing decisions. Annex A.7.1: Audit log requirements for repudiation prevention in AI-assisted signature workflows.
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="algo-fips">FIPS 205 · Backup DSA</div>
+      <div class="algo-name">SLH-DSA</div>
+      <div class="algo-basis">Stateless Hash-Based Signature<br>(ex. SPHINCS+)</div>
+      <div class="algo-purpose">Backup signature method using different mathematical foundations than ML-DSA. Intended to provide diversity — if ML-DSA proves vulnerable, SLH-DSA provides algorithmic continuity.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 6.3: Planning of changes — governance of fallback triggers from ML-DSA to SLH-DSA. Clause 10: Corrective action protocols for algorithm deprecation events.
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="algo-fips">FIPS 203 Backup · Mar 2025</div>
+      <div class="algo-name">HQC</div>
+      <div class="algo-basis">Hamming Quasi-Cyclic<br>Code-Based Scheme</div>
+      <div class="algo-purpose">Fifth NIST PQC algorithm, announced March 2025 as backup for ML-KEM using code-based (not lattice) mathematics. Draft FIPS expected early 2026, final ~2027. Provides mathematical diversity.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 10: Continuous improvement — AIMS must incorporate HQC readiness into the improvement cycle. Clause 4.1: Update organisational context as HQC standard evolves through 2027.
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="algo-fips">SP 800-208 · Specialised</div>
+      <div class="algo-name">LMS / XMSS</div>
+      <div class="algo-basis">Stateful Hash-Based Signatures<br>Hardware &amp; Gov. Use</div>
+      <div class="algo-purpose">Stateful hash-based schemes for specialised hardware and governmental contexts. State management complexity limits general use — requiring careful operational governance.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 8.1: Operational controls for state management of stateful signature schemes. Clause 8.2: Risk assess AI components managing signing state to prevent re-use vulnerabilities.
+      </div>
+    </div>
+    <div class="algo-card">
+      <div class="algo-fips">Hybrid Transition · IETF</div>
+      <div class="algo-name">PQ/T Hybrids</div>
+      <div class="algo-basis">PQC + Classical Combined<br>(X25519 + ML-KEM, etc.)</div>
+      <div class="algo-purpose">During transition, IETF recommends hybrid modes combining classical and PQC algorithms in parallel. FIPS allows hybrid combinations where at least one component is FIPS-approved. AI governs selection logic.</div>
+      <div class="algo-42001">
+        <strong>ISO 42001 Governance Touch</strong>
+        Clause 6.1.2: Risk criteria must include hybrid failure modes. Clause 8.3: Treatment plans for transition from hybrid to pure-PQC as confidence in PQC matures.
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 36px 0 16px; letter-spacing: 0.06em; text-transform: uppercase;">PQC ADOPTION TIMELINE &amp; ISO 42001 PDCA ALIGNMENT</h3>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">AUGUST 2024</div>
+      <div class="timeline-title">NIST Finalises FIPS 203/204/205</div>
+      <div class="timeline-body">ML-KEM, ML-DSA, SLH-DSA become official standards. ISO 42001 Clause 4.1 external context update required. PQC vendors must revise scope documents and risk assessments to reflect finalised algorithm specifications.</div>
+    </div>
+    <div class="timeline-item gold">
+      <div class="timeline-date">MARCH 2025</div>
+      <div class="timeline-title">NIST Selects HQC as ML-KEM Backup</div>
+      <div class="timeline-body">Fifth PQC algorithm announced using code-based mathematics for diversity. ISO 42001 Clause 10 (continuous improvement) triggers: organisations must assess HQC readiness and update AI impact assessments covering algorithm selection logic.</div>
+    </div>
+    <div class="timeline-item violet">
+      <div class="timeline-date">2026 TARGET</div>
+      <div class="timeline-title">First PQC Certificates Commercially Available</div>
+      <div class="timeline-body">NIST projection for first commercially issued post-quantum certificates. ISO 42001 Clause 6.2 AI objectives should include ML-KEM adoption milestones. AI-automated PKI systems require Clause 8.4 impact assessments before production deployment.</div>
+    </div>
+    <div class="timeline-item orange">
+      <div class="timeline-date">EARLY 2027</div>
+      <div class="timeline-title">HQC Final FIPS Standard Expected</div>
+      <div class="timeline-body">HQC draft FIPS (early 2026) → final standard (~2027). ISO 42001 planning cycle must incorporate HQC into scope. AI components selecting between ML-KEM and HQC require updated risk criteria under Clause 6.1.2.</div>
+    </div>
+    <div class="timeline-item green">
+      <div class="timeline-date">2030–2035</div>
+      <div class="timeline-title">CNSA 2.0 Full Transition Deadlines</div>
+      <div class="timeline-body">Australia targets full PQC adoption by 2030; U.S. NSS systems require pure post-quantum by 2035. ISO 42001's 3-year certification cycle with annual surveillance audits provides the ongoing governance mechanism to manage multi-year migration programmes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 5: RISK ASSESSMENT DEEP-DIVE ─── -->
+<section id="s5">
+  <div class="section-header">
+    <span class="section-num">05 //</span>
+    <h2 class="section-title">Risk Assessment <span class="highlight">Deep-Dive</span> — Non-Determinism in Quantum-Vulnerable Environments</h2>
+  </div>
+
+  <p class="prose">
+    The most technically sophisticated question ISO 42001 must answer for PQC vendors is: <strong>how
+    do you perform a risk assessment on a component whose outputs are inherently non-deterministic,
+    operating in an environment threatened by adversaries with exponentially growing computational
+    capabilities?</strong> The standard's architecture provides a structural answer, even if it
+    does not use the words "non-deterministic" or "quantum" in its normative text.
+  </p>
+
+  <div class="callout violet">
+    <div class="callout-label">📐 Structural Mechanism</div>
+    <p>ISO 42001 handles non-determinism by <strong>separating risk assessment from impact assessment</strong>
+    (Clauses 6.1.2 vs 6.1.4), requiring ongoing operational re-assessment (Clause 8.2), and mandating
+    treatment plans with dynamic update triggers (Clause 8.3). Together, these create a governance loop
+    that <em>institutionalises the management of variance</em>, rather than assuming deterministic outputs.
+    This is structurally identical to what cryptographic agility management requires.</p>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 32px 0 20px; letter-spacing: 0.06em; text-transform: uppercase;">THE DUAL ASSESSMENT ARCHITECTURE</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-accent"></div>
+      <div class="card-label">Clause 6.1.2 + 8.2</div>
+      <h3>AI Risk Assessment</h3>
+      <p>Evaluates <strong>probability and severity</strong> of adverse AI behaviour. For non-deterministic systems, practitioners cannot assign fixed probabilities — instead, ISO 42001 requires defining <em>risk criteria</em> against which a <em>distribution of outcomes</em> is evaluated.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">For PQC vendors: assess the probability distribution of entropy validator false rejections, anomaly detector false positives under quantum-adversarial inputs, and migration advisor recommendation errors.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent gold"></div>
+      <div class="card-label">Clause 6.1.4 + 8.4</div>
+      <h3>AI System Impact Assessment</h3>
+      <p>Evaluates <strong>consequences</strong> at socio-technical scale: intended use, foreseeable misuse, impacts on individuals, groups, and society. Unique to ISO 42001 — no equivalent exists in ISO 27001 or FIPS 140-3.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">For PQC vendors: what is the blast radius if the AI-driven certificate authority makes erroneous revocation decisions at scale? How does a flawed entropy validator affect dependent PKI hierarchies?</p>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 32px 0 20px; letter-spacing: 0.06em; text-transform: uppercase;">STRIDE THREAT MODEL — APPLIED TO AI-IN-CRYPTOGRAPHIC-INFRASTRUCTURE</h3>
+
+  <table class="clause-table">
+    <thead>
+      <tr>
+        <th>STRIDE Threat</th>
+        <th>ISO 42001 Lifecycle Stage</th>
+        <th>Cryptographic / PQC Context</th>
+        <th>Annex A Reference</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-blue">SPOOFING</span></td>
+        <td>Inception (design)</td>
+        <td>Adversarial inputs masquerading as legitimate entropy samples to poison QRNG validation models</td>
+        <td>A.8.1</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-orange">TAMPERING</span></td>
+        <td>Design &amp; Development</td>
+        <td>Modification of ML-KEM parameter selection logic or training data for PQC migration advisor models</td>
+        <td>A.9.1</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-violet">REPUDIATION</span></td>
+        <td>Verification &amp; Validation</td>
+        <td>Lack of audit logs for AI-assisted certificate issuance and key revocation decisions</td>
+        <td>A.7.1</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-gold">INFO DISCLOSURE</span></td>
+        <td>Deployment</td>
+        <td>AI model inversion attacks extracting key material patterns from ML inference endpoints</td>
+        <td>A.5.1</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">DENIAL OF SERVICE</span></td>
+        <td>Operation &amp; Monitoring</td>
+        <td>Adversarial inputs causing entropy validator to perpetually reject valid QRNG output, halting cryptographic operations</td>
+        <td>A.10.3</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">ELEVATION OF PRIV.</span></td>
+        <td>Operation &amp; Monitoring</td>
+        <td>AI anomaly detector manipulation causing suppression of legitimate threat alerts, elevating attacker persistence</td>
+        <td>A.10.3</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warning-banner">
+    <div class="warning-icon">⚡</div>
+    <div class="warning-content">
+      <div class="warning-title">The Non-Determinism Problem — Honest Assessment</div>
+      <p>ISO 42001 does <strong>not</strong> use the terms "non-deterministic," "stochastic," or "quantum" in
+      its normative text. The explicit accounting for non-determinism in a quantum-vulnerable environment
+      must be <strong>constructed by the implementer</strong> through: (1) quantifying quantum adversary threat
+      models in Clause 4.1 environmental analysis; (2) defining variance-aware risk criteria in Clause 6.1.2;
+      (3) populating impact assessments with quantum-threat intelligence (NIST SP 800-208, ETSI GR QSC 006,
+      ENISA PQC guidelines). The standard provides the scaffold. The domain expertise — your responsibility.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 6: ANNEX A CONTROLS ─── -->
+<section id="s6">
+  <div class="section-header">
+    <span class="section-num">06 //</span>
+    <h2 class="section-title">Annex A <span class="highlight">Controls</span> — Priority Set for Cryptographic Security</h2>
+  </div>
+
+  <p class="prose" style="margin-bottom: 28px;">
+    ISO 42001 Annex A provides 38 controls across six domains. Below are the controls of highest
+    relevance to cryptographic security and PQC vendors, with specific application notes.
+    The Statement of Applicability (SoA) produced under Clause 6.1.3 must document which controls
+    apply, which are excluded, and the justification for each decision.
+  </p>
+
+  <h4 style="font-family: var(--mono); font-size: 11px; color: var(--accent-blue); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px;">DOMAIN: AI SYSTEM GOVERNANCE (ANNEX A.5)</h4>
+  <div class="control-grid">
+    <div class="control-item">
+      <div class="control-ref">A.5.1</div>
+      <div class="control-name">Intended Use &amp; Purpose</div>
+      <div class="control-desc">Define intended purpose of each AI system in the cryptographic pipeline. PQC context: explicit statement that entropy validator is not intended to replace FIPS-certified TRNG hardware.</div>
+    </div>
+    <div class="control-item">
+      <div class="control-ref">A.5.2</div>
+      <div class="control-name">AI System Documentation</div>
+      <div class="control-desc">Comprehensive documentation for AI components: architecture, training data lineage, inference pipeline, cryptographic function served, and known limitations.</div>
+    </div>
+    <div class="control-item">
+      <div class="control-ref">A.5.4</div>
+      <div class="control-name">Stakeholder Engagement</div>
+      <div class="control-desc">Engage cryptographic operations teams, CISO, and end-users in AI system impact assessments. PQC context: customer notification for AI-driven migration recommendation changes.</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--mono); font-size: 11px; color: var(--accent-gold); letter-spacing: 0.12em; text-transform: uppercase; margin: 22px 0 14px;">DOMAIN: DATA GOVERNANCE (ANNEX A.6)</h4>
+  <div class="control-grid">
+    <div class="control-item gold">
+      <div class="control-ref">A.6.1</div>
+      <div class="control-name">Data Quality</div>
+      <div class="control-desc">Training data quality requirements for ML models in cryptographic pipelines. Entropy samples, historical key usage patterns, and cipher suite telemetry must meet documented quality criteria.</div>
+    </div>
+    <div class="control-item gold">
+      <div class="control-ref">A.6.2</div>
+      <div class="control-name">Data Provenance</div>
+      <div class="control-desc">Cryptographic data provenance chain: who collected entropy samples, what TRNG hardware, when, under what conditions. Critical for NIST SP 800-90B compliance of AI entropy validators.</div>
+    </div>
+    <div class="control-item gold">
+      <div class="control-ref">A.6.4</div>
+      <div class="control-name">Data Protection</div>
+      <div class="control-desc">Protection of data used in AI model training and inference — particularly key usage telemetry and cryptographic operation logs that may reveal sensitive patterns if extracted.</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--mono); font-size: 11px; color: var(--accent-violet); letter-spacing: 0.12em; text-transform: uppercase; margin: 22px 0 14px;">DOMAIN: MODEL LIFECYCLE (ANNEX A.7 + A.9)</h4>
+  <div class="control-grid">
+    <div class="control-item violet">
+      <div class="control-ref">A.7.1</div>
+      <div class="control-name">Decision Audit Trails</div>
+      <div class="control-desc">Every AI-assisted cryptographic decision must be logged: entropy accept/reject, anomaly classification, key rotation recommendations. Anti-repudiation requirement for PQC migration advisors.</div>
+    </div>
+    <div class="control-item violet">
+      <div class="control-ref">A.7.2</div>
+      <div class="control-name">AI Model Transparency</div>
+      <div class="control-desc">Explainability requirements for AI decisions in security-critical paths. A classifier flagging a TLS session as anomalous must produce human-interpretable reasoning for human-in-the-loop review.</div>
+    </div>
+    <div class="control-item violet">
+      <div class="control-ref">A.9.1</div>
+      <div class="control-name">Secure Development</div>
+      <div class="control-desc">Anti-tampering controls for AI model development environments. PQC context: isolated development environments for ML-KEM parameter selection models, supply chain validation of ML frameworks.</div>
+    </div>
+    <div class="control-item violet">
+      <div class="control-ref">A.9.3</div>
+      <div class="control-name">Model Testing &amp; Validation</div>
+      <div class="control-desc">Pre-deployment testing of AI models under adversarial conditions. For PQC vendors: test entropy validators against known-bad QRNG outputs and adversarially crafted entropy streams.</div>
+    </div>
+  </div>
+
+  <h4 style="font-family: var(--mono); font-size: 11px; color: var(--accent-green); letter-spacing: 0.12em; text-transform: uppercase; margin: 22px 0 14px;">DOMAIN: OPERATIONS &amp; THIRD PARTIES (ANNEX A.10)</h4>
+  <div class="control-grid">
+    <div class="control-item green">
+      <div class="control-ref">A.10.3</div>
+      <div class="control-name">Availability &amp; Resilience</div>
+      <div class="control-desc">AI availability guarantees for cryptographic operations. Entropy validation downtime halts key generation. Anomaly detector outages create blind spots. Define and enforce SLAs for AI components.</div>
+    </div>
+    <div class="control-item green">
+      <div class="control-ref">A.10.5</div>
+      <div class="control-name">Incident Response</div>
+      <div class="control-desc">AI-specific incident response for cryptographic failures: what happens when the entropy validator produces systematic false rejections? Escalation path and rollback procedures must be documented.</div>
+    </div>
+    <div class="control-item green">
+      <div class="control-ref">A.10.6</div>
+      <div class="control-name">Third-Party AI Governance</div>
+      <div class="control-desc">Audit requirements for upstream AI components: cloud KMS AI features, HSM vendor firmware AI, entropy-as-a-service ML components. Extends ISO 27001 supplier management into AI-specific risk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION 7: STANDARDS COMPARISON ─── -->
+<section id="s7">
+  <div class="section-header">
+    <span class="section-num">07 //</span>
+    <h2 class="section-title">Standards <span class="highlight">Comparison</span> — The Governance Stack</h2>
+  </div>
+
+  <p class="prose" style="margin-bottom: 28px;">
+    No single standard covers all dimensions of AI-enabled cryptographic security. The table below
+    maps which standards address which governance dimensions — demonstrating why ISO 42001 is
+    <em>additive</em>, not competitive, with the existing cryptographic compliance stack.
+  </p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Governance Dimension</th>
+        <th>ISO/IEC 42001</th>
+        <th>ISO/IEC 27001</th>
+        <th>FIPS 140-3</th>
+        <th style="color: var(--accent-orange);">NIST AI RMF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AI Component Risk Assessment</td>
+        <td><span class="check">✓ Full</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ Guidance only</span></td>
+      </tr>
+      <tr>
+        <td>Cryptographic Algorithm Validation</td>
+        <td><span class="cross">✗ Out of scope</span></td>
+        <td><span class="partial">◑ A.8.24 only</span></td>
+        <td><span class="check">✓ Full</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+      </tr>
+      <tr>
+        <td>AI Model Lifecycle Governance</td>
+        <td><span class="check">✓ Full</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ Framework only</span></td>
+      </tr>
+      <tr>
+        <td>Third-Party AI Supply Chain</td>
+        <td><span class="check">✓ Annex A.10.6</span></td>
+        <td><span class="partial">◑ Supplier mgmt.</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ Guidance only</span></td>
+      </tr>
+      <tr>
+        <td>Key Material &amp; HSM Governance</td>
+        <td><span class="cross">✗ Out of scope</span></td>
+        <td><span class="check">✓ Full</span></td>
+        <td><span class="check">✓ Full</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+      </tr>
+      <tr>
+        <td>PQC Migration Governance (AI-assisted)</td>
+        <td><span class="check">✓ Cl. 6–8, 10</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ Partial</span></td>
+      </tr>
+      <tr>
+        <td>Entropy Validation AI Governance</td>
+        <td><span class="check">✓ Cl. 8.2, A.6</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ SP 800-90B only</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+      </tr>
+      <tr>
+        <td>Societal Impact Assessment</td>
+        <td><span class="check">✓ Cl. 6.1.4, 8.4</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="cross">✗ Not covered</span></td>
+        <td><span class="partial">◑ Guidance only</span></td>
+      </tr>
+      <tr>
+        <td>International Certifiability</td>
+        <td><span class="check">✓ 3-yr cycle</span></td>
+        <td><span class="check">✓ 3-yr cycle</span></td>
+        <td><span class="check">✓ Lab validation</span></td>
+        <td><span class="cross">✗ No certification</span></td>
+      </tr>
+      <tr>
+        <td>EU AI Act / NIS2 Alignment</td>
+        <td><span class="check">✓ Direct</span></td>
+        <td><span class="partial">◑ Partial (NIS2)</span></td>
+        <td><span class="cross">✗ Not aligned</span></td>
+        <td><span class="partial">◑ Partial</span></td>
+      </tr>
+      <tr>
+        <td>Continuous PDCA Improvement</td>
+        <td><span class="check">✓ Built-in</span></td>
+        <td><span class="check">✓ Built-in</span></td>
+        <td><span class="cross">✗ Point-in-time</span></td>
+        <td><span class="partial">◑ Guidance only</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-label">🧩 Recommended Compliance Stack for PQC Vendors</div>
+    <p><strong>FIPS 140-3</strong> (algorithm and module validation) + <strong>ISO/IEC 27001</strong>
+    (information security management) + <strong>ISO/IEC 42001</strong> (AI management) = the minimum
+    governance stack for a PQC software vendor operating in regulated markets. Approximately
+    <strong>40% of controls overlap</strong> between ISO 42001 and ISO 27001, enabling an integrated
+    management system with a single audit programme. Add <strong>Common Criteria EAL 4+</strong>
+    for governmental/defence procurement, and <strong>NIST AI RMF</strong> alignment for U.S. federal
+    market access.</p>
+  </div>
+</section>
+
+<!-- ─── SECTION 8: IMPLEMENTATION ROADMAP ─── -->
+<section id="s8">
+  <div class="section-header">
+    <span class="section-num">08 //</span>
+    <h2 class="section-title">Implementation <span class="highlight">Roadmap</span> — Cryptographic Security &amp; PQC Context</h2>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin-bottom: 20px; letter-spacing: 0.06em; text-transform: uppercase;">AIMS MATURITY MODEL — CRYPTOGRAPHIC AI GOVERNANCE</h3>
+
+  <div class="maturity-track">
+    <div class="maturity-level">
+      <div class="maturity-num">0</div>
+      <div class="maturity-title">Unaware</div>
+      <div class="maturity-desc">AI components in cryptographic products ungoverned. No AIMS. Risk exists but unquantified.</div>
+    </div>
+    <div class="maturity-level active">
+      <div class="maturity-num">1</div>
+      <div class="maturity-title">Initiated</div>
+      <div class="maturity-desc">Gap analysis complete. Scope defined. AI inventory documented. Leadership commitment obtained.</div>
+    </div>
+    <div class="maturity-level active">
+      <div class="maturity-num">2</div>
+      <div class="maturity-title">Defined</div>
+      <div class="maturity-desc">Risk criteria established. 6.1.2 assessments complete for all Tier 1 AI components. SoA drafted.</div>
+    </div>
+    <div class="maturity-level target">
+      <div class="maturity-num">3</div>
+      <div class="maturity-title">Certified</div>
+      <div class="maturity-desc">ISO 42001 certification achieved. Annual surveillance cadence established. Integrated with ISO 27001.</div>
+    </div>
+    <div class="maturity-level">
+      <div class="maturity-num">4</div>
+      <div class="maturity-title">Optimised</div>
+      <div class="maturity-desc">PQC migration objectives embedded in AIMS. Continuous improvement driving crypto-agility governance.</div>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 36px 0 20px; letter-spacing: 0.06em; text-transform: uppercase;">PHASED IMPLEMENTATION — 12-MONTH PROGRAMME</h3>
+
+  <div class="roadmap">
+    <div class="roadmap-phase">
+      <div class="phase-label" style="color: var(--accent-blue);">Phase 1 · Months 1–2</div>
+      <div class="phase-title">Foundation &amp; Scoping</div>
+      <ul class="phase-items">
+        <li>AI inventory: identify all probabilistic components in cryptographic products</li>
+        <li>Regulatory context mapping: CNSA 2.0, EU AI Act, NIS2, FIPS 203/204/205</li>
+        <li>Gap analysis against ISO 42001 Clauses 4–10</li>
+        <li>Management commitment and AIMS owner designation</li>
+        <li>Scope document and AI Policy drafting</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-label" style="color: var(--accent-gold);">Phase 2 · Months 3–5</div>
+      <div class="phase-title">Risk &amp; Impact Assessment</div>
+      <ul class="phase-items">
+        <li>Clause 6.1.2: AI risk assessment for all in-scope AI components</li>
+        <li>Clause 6.1.4: AI system impact assessments for Tier 1 systems</li>
+        <li>Quantum adversary threat models integrated into risk criteria</li>
+        <li>Statement of Applicability (SoA) for Annex A controls</li>
+        <li>Risk Treatment Plan with PQC migration objectives</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-label" style="color: var(--accent-violet);">Phase 3 · Months 6–9</div>
+      <div class="phase-title">Controls Implementation</div>
+      <ul class="phase-items">
+        <li>Annex A priority controls: A.6 (data), A.7 (transparency), A.9 (secure dev)</li>
+        <li>AI decision audit logging for cryptographic operations</li>
+        <li>Third-party AI supplier assessment programme (A.10.6)</li>
+        <li>Competence programme: PQC + AI governance training</li>
+        <li>Performance KPIs for deployed AI components</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-label" style="color: var(--accent-green);">Phase 4 · Months 10–12</div>
+      <div class="phase-title">Certification &amp; Continuous Improvement</div>
+      <ul class="phase-items">
+        <li>Internal AIMS audit (Clause 9.2)</li>
+        <li>Management review against PQC migration milestones</li>
+        <li>Stage 1 certification audit (documentation review)</li>
+        <li>Stage 2 certification audit (implementation verification)</li>
+        <li>Surveillance audit cadence established (annual, years 2–3)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="font-family: var(--mono); font-size: 13px; color: var(--text-primary); margin: 36px 0 20px; letter-spacing: 0.06em; text-transform: uppercase;">STRATEGIC BUSINESS VALUE — PQC VENDORS</h3>
+
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-accent"></div>
+      <div class="card-icon">🏛</div>
+      <h3>Regulatory Pre-Positioning</h3>
+      <p style="font-size: 12px;">EU AI Act Art. 15 mandates accuracy, robustness, and security for high-risk AI. ISO 42001 provides the governance evidence. NIS2 Art. 21 risk management requirements partially satisfied.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent gold"></div>
+      <div class="card-icon">🎯</div>
+      <h3>Procurement Differentiation</h3>
+      <p style="font-size: 12px;">Government and defence procurement increasingly requires AI governance certification alongside FIPS 140-3. ISO 42001 positions PQC vendors for NSS and classified system contracts.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent violet"></div>
+      <div class="card-icon">🔗</div>
+      <h3>Supply Chain Trust</h3>
+      <p style="font-size: 12px;">Customers integrating PQC libraries need assurance that upstream AI components governing algorithm selection are themselves governed. ISO 42001 provides that auditable assurance.</p>
+    </div>
+    <div class="card">
+      <div class="card-accent green"></div>
+      <div class="card-icon">⚡</div>
+      <h3>Crypto-Agility Governance</h3>
+      <p style="font-size: 12px;">The PDCA cycle provides the organisational mechanism for managing algorithm lifecycle: FIPS finalisation → scope update → risk reassessment → treatment plan → surveillance audit.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="callout">
+    <div class="callout-label">📌 Key Limitation to Disclose</div>
+    <p>ISO 42001 implementation requires <strong>significant domain expertise to populate meaningfully</strong>.
+    The standard's threat-agnostic design means that a generic AIMS implementation will not address quantum
+    adversary risks unless the implementer explicitly introduces PQC threat intelligence (NIST SP 800-208,
+    ETSI GR QSC 006, ENISA PQC guidelines) into the Clause 4.1 environmental analysis and Clause 6.1.2
+    risk criteria. Certification bodies conducting ISO 42001 audits for PQC vendors should include
+    cryptographic security subject matter expertise in the audit team — a capability that remains rare
+    as of 2026, with the AI audit market described by BSI as potentially becoming "the wild west."</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">// HEIC Ltd. · Research Analysis · ISO/IEC 42001:2023</div>
+  <p>This analysis covers ISO/IEC 42001:2023 implementation for cryptographic security and post-quantum cryptography software vendors. It draws on NIST FIPS 203/204/205, NIST SP 800-90B/208, ETSI GR QSC 006, EU AI Act, NIS2, and CNSA 2.0 regulatory frameworks.</p>
+  <p>Prepared by HEIC Ltd. · April 2026. Not legal or certification advice — consult an accredited ISO 42001 certification body for formal audit engagements.</p>
+  <div class="footer-refs">
+    <a href="#">ISO/IEC 42001:2023</a>
+    <a href="#">NIST FIPS 203 (ML-KEM)</a>
+    <a href="#">NIST FIPS 204 (ML-DSA)</a>
+    <a href="#">NIST FIPS 205 (SLH-DSA)</a>
+    <a href="#">NIST SP 800-90B</a>
+    <a href="#">EU AI Act</a>
+    <a href="#">NIS2 Directive</a>
+    <a href="#">CNSA 2.0</a>
+    <a href="#">ETSI GR QSC 006</a>
+  </div>
+</footer>
+
+</body>
+</html>
